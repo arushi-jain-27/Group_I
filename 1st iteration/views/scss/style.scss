@@ -1,0 +1,63 @@
+@import "compass/css3";
+
+body {
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+  position: relative;
+}
+
+.post-list-subhead {
+  text-transform: uppercase;
+  color: #aaa;
+  border-bottom: 1px solid #eee;
+  padding: 0.4em 0;
+  font-size: 80%;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.post-item {
+  padding: 10px 20px;
+  margin: 20px 0;
+  border-left: 1px solid #EEE;
+  &:hover {
+    background-color: #ddd;
+  }
+}
+
+.post-item-header {
+  border-bottom: 2px solid #000;
+}
+
+.post-item-title {
+  font-size: 2em;
+  color: #222;
+  margin-bottom: 0.2em;
+  font-weight: bold;
+}
+
+.post-item-category {
+  margin: 0 0.1em;
+  padding: 0.3em 1em;
+  color: #fff;
+  background: #000;
+  font-size: 80%;
+  text-decoration: none;
+}
+
+.post-item-more {
+  text-transform: uppercase;
+  border: 1px solid #000;
+  padding: 2px 8px;
+  margin: 0;
+}

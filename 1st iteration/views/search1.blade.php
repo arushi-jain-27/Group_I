@@ -79,6 +79,8 @@ a {
 </head>
 
 <body>
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic|Crimson+Text:400,600' type='text/css' rel='stylesheet' />
 <?php 
     $search=$send;
     //echo "$send";
@@ -88,7 +90,7 @@ a {
 $search=$send;
     //echo "$send";
       if(!empty($results)){
-         echo "<center ><a href='http://127.0.0.1:8000/search1/$send' > <button class='post'>order according to number of words </button></a></center>";
+         echo "<center ><a href='http://127.0.0.1:8000/searchde/$search' > <button class='post'>order according to most visited </button></a></center>";
       }
 foreach ($results as $results) {
 echo "<a href='http://127.0.0.1:8000/search/$results->id' ><div class='wrapper'>

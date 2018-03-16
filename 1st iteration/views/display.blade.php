@@ -71,6 +71,13 @@ a {
   padding: 2px 8px;
   margin: 0;
 }
+.abc{
+  font-size: 175%;
+  color: #6495ED;
+  padding: 2px 8px;
+  
+  margin-top: 1em;
+}
 
     </style>
 
@@ -79,39 +86,49 @@ a {
 </head>
 
 <body>
-<?php 
-    $search=$send;
-    //echo "$send";
-      if(!empty($results)){
-        // echo "<a href='http://127.0.0.1:8000/search1/$send' > order according to number of words </a>";
-      }
-$search=$send;
-    //echo "$send";
-      if(!empty($results)){
-         echo "<center ><a href='http://127.0.0.1:8000/search1/$send' > <button class='post'>order according to number of words </button></a></center>";
-      }
-foreach ($results as $results) {
-echo "<a href='http://127.0.0.1:8000/search/$results->id' ><div class='wrapper'>
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,900,400italic|Crimson+Text:400,600' type='text/css' rel='stylesheet' />
+  <center class='abc'>The Result is :</center>
+<?php   
+foreach($results as $results) {
+echo "<a>      
+<div class='wrapper'>
 <div class='post-list'>  
 <section class='post-item'>
         <header >
-            <h2 class='post-item-title'>Title : </h2> $results->a
+            <h2 class='post-item-title'>Title : </h2> $results->b
         </header>
         <header >
-            <h2 class='post-item-title'>Author : </h2>$results->c
+            <h2 class='post-item-title'>Translation : </h2>$results->a
         </header>
         <header >
-            <h2 class='post-item-title'>Genre : </h2>$results->d
+            <h2 class='post-item-title'>Author : </h2>$results->i
         </header>
         <header >
-            <h2 class='post-item-title'>Publisher : </h2>$results->f
+            <h2 class='post-item-title'>Genre : </h2>$results->c
+        </header>
+        <header >
+            <h2 class='post-item-title'>Language : </h2>$results->d
+        </header>
+        <header >
+            <h2 class='post-item-title'>Publisher : </h2>$results->e
+        </header>
+        <header >
+            <h2 class='post-item-title'>Keywords : </h2>$results->g
+        </header>
+        <header >
+            <h2 class='post-item-title'>Keywords(Translation) : </h2>$results->h
+        </header>
+        <header >
+            <h2 class='post-item-title'>Description : </h2>$results->j
+        </header>
+        <header >
+            <h2 class='post-item-title'>Description(Translation) : </h2>$results->f
         </header>
     </section>
 </div>
-</div>
-</a>";
-  }
-  
+</div></a>";
+}
 ?>
 </body>
 
