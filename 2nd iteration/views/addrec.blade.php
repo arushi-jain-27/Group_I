@@ -29,6 +29,42 @@
 </head>
 <body>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+ $(document).ready(function(){
+    $(".latterspace").keypress(function(event){
+        var inputValue = event.which;
+        if(!(inputValue >= 65 && inputValue <= 90) && !(inputValue >= 97 && inputValue <= 122) && (inputValue != 32 && inputValue != 0)) { 
+            event.preventDefault(); 
+        }
+    });
+    $(".onlynumber").keypress(function(event){
+        var inputValue = event.which;
+        if(!(inputValue >= 48 && inputValue <= 57)) { 
+            event.preventDefault(); 
+        }
+    });
+    $(".onlyletter").keypress(function(event){
+        var inputValue = event.which;
+        if(!(inputValue >= 65 && inputValue <= 90) && !(inputValue >= 97 && inputValue <= 122) ) { 
+            event.preventDefault(); 
+        }
+    });
+    $('#file').bind('change', function() {
+    var a=(this.files[0].size);
+    if(a > 6000000) {
+            alert('large file');
+            document.getElementById("btn").style.display='none';
+          }
+          else
+        {
+            $('#btn').show();
+        }
+    });
+
+});
+</script>
 <div class="btm_border">
 <div class="h_bg">
 <div class="wrap">
@@ -69,20 +105,20 @@
 					<div class="login-agileits-top"> 	
 						<form action="/addrec" method="post" enctype="multipart/form-data"> 
 						{{csrf_field()}}
-							 <input type="text" class="form-control" id="accession_no" placeholder="accession_no" name="accession_no" required>
+							 <input type="text" class="onlynumber form-control " id="accession_no" placeholder="accession_no" name="accession_no" required>
 							<input type="text" class="form-control" id="title" placeholder="title" name="title" required>
-							<input type="text" class="form-control" id="author" placeholder="author" name="author" required>
+							<input type="text" class="latterspace form-control" id="author" placeholder="author" name="author" required>
 							
-							    <input type="text" class="form-control" id="publisher" placeholder="publisher" name="publisher" required>
-						   <input type="text" class="form-control" id="genre" placeholder="genre" name="genre">
+							    <input type="text" class="latterspace form-control" id="publisher" placeholder="publisher" name="publisher" required>
+						   <input type="text" class="latterspace form-control" id="genre" placeholder="genre" name="genre">
 							<input type="text" class="form-control" id="language" placeholder="language" name="language" >
-							<input type="text" class="form-control" id="place" placeholder="place" name="place" >
+							<input type="text" class="latterspace form-control" id="place" placeholder="place" name="place" >
 							 <input type="text" id="keywords" class="form-control" placeholder="keywords" name="keywords" required>
 							 <input type="text" id="description" class="form-control" placeholder="description" name="description">
 							 <input type="text" class="form-control" id="year" placeholder="year" name="year" >
 							 <label for="file">Select file to upload</label>
 							<input type="file" class="form-control" id="file" placeholder="File" name="file" >
-							<input type="submit" value="Add"> 
+							<input type="submit" id='btn' value="Add"> 
 						</form> 	
 					</div> 
 					
