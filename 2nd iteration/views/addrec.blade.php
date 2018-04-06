@@ -115,7 +115,7 @@
 							<input type="text" class="latterspace form-control" id="place" placeholder="place" name="place" >
 							 <input type="text" id="keywords" class="form-control" placeholder="keywords" name="keywords" required>
 							 <input type="text" id="description" class="form-control" placeholder="description" name="description">
-							 <input type="text" class="form-control" id="year" placeholder="year" name="year" >
+							 <input type="text" class="form-control onlynumber" id="year" placeholder="year" pattern="{4}" name="year" >
 							 <label for="file">Select file to upload</label>
 							<input type="file" class="form-control" id="file" placeholder="File" name="file" >
 							<input type="submit" id='btn' value="Add"> 
