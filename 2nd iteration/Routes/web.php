@@ -491,3 +491,370 @@ Route::post('/register','registrationController@store');
 Route::get('/login','sessionsController@create');
 Route::post('/login','sessionsController@store');
 Route::get('/logout','sessionsController@destroy');
+// Nikhil's code
+
+Route::get('/', function () {
+	
+    return view('cs258/index1');
+});
+
+
+Route::get('/basic', function() {
+	// search
+	
+	$search=request('search');
+	//$user_id=request('user_id');
+	$search="%".$search."%";
+	$send=$search;
+	$results = DB::select("
+		update relations
+		set c=0;
+			");
+	
+	$words = explode(" ", $search);
+	//$l=sizeof($words);
+	//dd($l);
+	foreach ($words as $search) {
+		//echo "$search aaaa";
+		$l=strlen($search);
+		if($search[0]!=$search[$l-1] && $search[0]=='%'){
+			$search="".$search."%";
+		}
+		elseif ($search[0]!=$search[$l-1] &&  $search[$l-1]=='%') {
+			$search="%".$search."";	
+		}
+		else if($search[0]!=$search[$l-1])			
+			$search="%".$search."%";
+		//echo "$search<br />";
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN book AS t2 ON t1.book_id=t2.book_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.book_id in (SELECT book_id from book where title like CONCAT('%', '$search', '%') or keywords like CONCAT('%', '$search', '%') or description like CONCAT('%', '$search', '%') )");
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN genre AS t2 ON t1.genre_id=t2.genre_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.genre_id in (SELECT genre_id from genre where name like ? )		
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN author AS t2 ON t1.author_id=t2.author_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.author_id in (SELECT author_id from author where name like ? )		
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN language AS t2 ON t1.language_id=t2.language_id 
+			SET t1.c = t2.c+t1.c 
+			where  t1.language_id in (SELECT language_id from language  where name like ? )		
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN publisher AS t2 ON t1.publisher_id=t2.publisher_id 
+			SET t1.c = t2.c+t1.c 
+			where  t1.publisher_id in (SELECT publisher_id from publisher  where name like ? )	
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN translations AS t2 ON t1.translations_id=t2.translations_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.translations_id in (SELECT translations_id from translations where name like ? or keywords like ? or keywords like ? or translator like ? or year like ?)
+			", array($search,$search,$search,$search,$search));
+	}
+	$results= DB::select("	
+		select relations.id
+		from relations
+		where relations.c>0
+		order by relations.c desc
+			");
+
+	if(empty($results)){
+		 echo "Not Found";
+		 echo "<a href='http://127.0.0.1:8000' > <br />home page <a>  "; 
+	}
+	return view('search2',compact('results','send'));
+});
+
+
+Route::get('/searchde/{results}', function ($id) {
+	//link from search 
+	//dd (auth()->id());
+	$search=$id;
+	$l=strlen($search);
+	if($search[0]!='%' && $search[$l-1]!='%'){
+		$search="%".$search."%";
+	}
+	$send=$search;
+	$results = DB::select("
+		update relations
+		set c=0;
+			");
+	
+	$words = explode(" ", $search);
+	//$l=sizeof($words);
+	//dd($l);
+	foreach ($words as $search) {
+		//echo "$search aaaa";
+		$l=strlen($search);
+		if($search[0]!=$search[$l-1] && $search[0]=='%'){
+			$search="".$search."%";
+		}
+		elseif ($search[0]!=$search[$l-1] &&  $search[$l-1]=='%') {
+			$search="%".$search."";	
+		}
+		else if($search[0]!=$search[$l-1])			
+			$search="%".$search."%";
+		//echo "$search<br />";
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN book AS t2 ON t1.book_id=t2.book_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.book_id in (SELECT book_id from book where title like CONCAT('%', '$search', '%') or keywords like CONCAT('%', '$search', '%') or description like CONCAT('%', '$search', '%') )");
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN genre AS t2 ON t1.genre_id=t2.genre_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.genre_id in (SELECT genre_id from genre where name like ? )		
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN author AS t2 ON t1.author_id=t2.author_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.author_id in (SELECT author_id from author where name like ? )		
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN language AS t2 ON t1.language_id=t2.language_id 
+			SET t1.c = t2.c+t1.c 
+			where  t1.language_id in (SELECT language_id from language  where name like ? )		
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN publisher AS t2 ON t1.publisher_id=t2.publisher_id 
+			SET t1.c = t2.c+t1.c 
+			where  t1.publisher_id in (SELECT publisher_id from publisher  where name like ? )	
+			", array($search));
+		DB::select("
+			UPDATE relations AS t1 INNER JOIN translations AS t2 ON t1.translations_id=t2.translations_id 
+			SET t1.c = t2.c+t1.c 
+			where t1.translations_id in (SELECT translations_id from translations where name like ? or keywords like ? or keywords like ? or translator like ? or year like ?)
+			", array($search,$search,$search,$search,$search));
+	}
+	$results= DB::select("	
+		select relations.id
+		from relations
+		where relations.c>0
+		order by relations.c desc
+			");
+
+	if(empty($results)){
+		 echo "Not Found";
+		 echo "<a href='http://127.0.0.1:8000' > <br />home page <a>  "; 
+	}
+	return view('search1',compact('results','send'));
+});
+
+Route::get('/search2/{results}/{user}', function ($id, $user_id) {
+	//$user_id=auth()->id();
+	//link from search 
+	//dd (auth()->id());
+	DB::select(" UPDATE book        SET c = c+1 where book_id        in (select book_id from relations where $id=id )  ");
+	DB::select(" UPDATE translations SET c = c+1 where translations_id in (select translations_id from relations where $id=id )");
+	DB::select(" UPDATE author       SET c = c+1 where author_id      in (select author_id from relations where $id=id )");
+	DB::select(" UPDATE genre        SET c = c+1 where genre_id       in (select genre_id from relations where $id=id )");
+	DB::select(" UPDATE publisher    SET c = c+1 where publisher_id   in (select publisher_id from relations where $id=id  )");
+	DB::select(" UPDATE language     SET c = c+1 where language_id    in (select language_id from relations where $id=id )");
+
+	
+    return view('display',compact('id', 'user_id'));
+	//return view ('display', compact('id','user'));
+});
+
+
+
+Route::get('/search3/{search}/{user}', function($search,$user_id) {
+	// search
+	//$search=request('search');
+	//$search=$search;
+	//dd (auth()->id());
+	$results = DB::select("
+		update relations
+		set c=0;
+			");
+	$send=$search;
+	//echo "$search";
+	$words = explode(" ", $search);
+	//$l=sizeof($words);
+	//dd($l);
+	foreach ($words as $search) {
+		//echo "$search ";
+	$l=strlen($search);
+	if($search[0]!=$search[$l-1] && $search[0]=='%'){
+		$search="".$search."%";
+	}
+	elseif ($search[0]!=$search[$l-1] &&  $search[$l-1]=='%') {
+		$search="%".$search."";	
+	}
+	else if($search[0]!=$search[$l-1])			
+		$search="%".$search."%";
+	//echo "$search<br />";
+	$results = DB::select("
+		UPDATE relations AS t1 
+		SET t1.c = t1.c+1 
+		where t1.book_id in (SELECT book_id from book where title like ? or keywords like ? or keywords like ? or year like ?)		
+			", array($search,$search,$search,$search));
+	$results = DB::select("
+		UPDATE relations AS t1 INNER JOIN genre AS t2 ON t1.genre_id=t2.genre_id 
+		SET t1.c = t1.c+1  
+		where t1.genre_id in (SELECT genre_id from genre where name like ? )		
+			", array($search));
+	$results = DB::select("
+		UPDATE relations AS t1 INNER JOIN author AS t2 ON t1.author_id=t2.author_id 
+		SET t1.c = t1.c+1 
+		where t1.author_id in (SELECT author_id from author where name like ? )		
+			", array($search));
+	$results = DB::select("
+		UPDATE relations AS t1 INNER JOIN language AS t2 ON t1.language_id=t2.language_id 
+		SET t1.c = t1.c+1  
+		where  t1.language_id in (SELECT language_id from language  where name like ? )		
+			", array($search));
+	$results = DB::select("
+		UPDATE relations AS t1 INNER JOIN publisher AS t2 ON t1.publisher_id=t2.publisher_id 
+		SET t1.c = t1.c+1 
+		where  t1.publisher_id in (SELECT publisher_id from publisher  where name like ? )		
+			", array($search));
+	$results = DB::select("
+		UPDATE relations AS t1 INNER JOIN translations AS t2 ON t1.translations_id=t2.translations_id 
+		SET t1.c = t1.c+1 
+		where t1.translations_id in (SELECT translations_id from translations where name like ? or keywords like ? or keywords like ? or translator like ? or year like ?)
+			", array($search,$search,$search,$search,$search));
+	
+	}
+	$results= DB::select("	
+		select relations.id
+		from relations
+		where relations.c>0
+		order by relations.c desc
+			");
+
+	if(empty($results)){
+		 echo "Not Found";
+		 echo "<a href='http://127.0.0.1:8000' > <br />home page <a>  "; 
+	}
+	return view('search1',compact('results','send','user_id'));
+});
+Route::get('/trending', function() {
+	DB::select("
+		update relations
+		set c=0;
+			");
+	DB::select("
+		update relations,book
+		set relations.c=book.c
+		where relations.book_id=book.book_id;
+			");
+	DB::select("
+		update relations,translations
+		set relations.c=relations.c+translations.c
+		where relations.translations_id=translations.translations_id;
+			");
+	DB::select("
+		update relations,author
+		set relations.c=relations.c+author.c
+		where relations.author_id=author.author_id;
+			");
+	DB::select("
+		update relations,genre
+		set relations.c=relations.c+genre.c
+		where relations.genre_id=genre.genre_id;
+			");
+	DB::select("
+		update relations,publisher
+		set relations.c=relations.c+publisher.c
+		where relations.publisher_id=publisher.publisher_id;
+			");
+	DB::select("
+		update relations,language
+		set relations.c=relations.c+language.c
+		where relations.language_id=language.language_id;
+			");
+	$results = DB::select("	
+		select relations.id
+		from relations
+		where relations.c>9
+		order by relations.c desc limit 10
+			");
+	return view('trending',compact('results'));
+});
+
+Route::get('/recommendations', function() {
+	$results='';
+	$id=auth()->id();
+	if(!empty($id)){
+		DB::select("
+		update relations,bookmark
+		set relations.c=0;
+			",array($id));
+		DB::select("
+			update relations
+			set c=-1
+			where book_id in (select book_id from bookmark where user_id=?);
+				",array($id));
+		DB::select("	
+			update relations
+			set c=1
+			where genre_id in (select genre_id from book_genre,bookmark where book_genre.book_id=bookmark.book_id and user_id=?);
+				",array($id));
+		DB::select("	
+			update relations
+			set c=1
+			where publisher_id in (select publisher_id from book_publisher,bookmark where book_publisher.book_id=bookmark.book_id and user_id=?);
+				",array($id));
+		DB::select("	
+			update relations
+			set c=1
+			where author_id in (select author_id from book_author,bookmark where book_author.book_id=bookmark.book_id and user_id=?);
+				",array($id));
+		DB::select("	
+			update relations
+			set c=1
+			where language_id in (select language_id from book_language,bookmark where book_language.book_id=bookmark.book_id and user_id=?);
+				",array($id));
+		DB::select("	
+			update relations
+			set c=1
+			where translations_id in (select translations_id from book_translations,bookmark where book_translations.book_id=bookmark.book_id and user_id=?);
+				",array($id));
+		DB::select("
+			update relations,book
+			set relations.c = relations.c + book.c
+			where relations.book_id=book.book_id and relations.c>0;
+				");
+		DB::select("
+			update relations,translations
+			set relations.c=relations.c+translations.c
+			where relations.translations_id=translations.translations_id and relations.c>0;
+				");
+		DB::select("
+			update relations,author
+			set relations.c=relations.c+author.c
+			where relations.author_id=author.author_id and relations.c>0;
+				");
+		DB::select("
+			update relations,genre
+			set relations.c=relations.c+genre.c
+			where relations.genre_id=genre.genre_id and relations.c>0;
+				");
+		DB::select("
+			update relations,publisher
+			set relations.c=relations.c+publisher.c
+			where relations.publisher_id=publisher.publisher_id and relations.c>0;
+				");
+		DB::select("
+			update relations,language
+			set relations.c=relations.c+language.c
+			where relations.language_id=language.language_id and relations.c>0;
+				");
+		$results=DB::select("
+			select id
+			from relations
+			where c>0
+			order by c desc;
+				");
+				$user_id=$id;
+		return view('recommendations',compact('results','user_id'));
+	}
+	else{
+		echo "<a href='/login'>Login to view Recommendations<a>";
+	}		
+});
